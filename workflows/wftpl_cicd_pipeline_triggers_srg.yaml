@@ -1,0 +1,159 @@
+metadata:
+  version: "1"
+  dependencies:
+    apps:
+      - id: dynatrace.automations
+        version: ^1.905.5
+  inputs:
+    - type: connection
+      schema: app:dynatrace.site.reliability.guardian:guardians
+      targets:
+        - tasks.create_demo_validations.script
+workflow:
+  title: CI/CD Pipeline triggers SRG
+  tasks:
+    sleep_30:
+      name: sleep_30
+      description: Build a custom task running js Code
+      action: dynatrace.automations:run-javascript
+      input:
+        script: |-
+          export default async function({execution_id}) {      
+            // your code goes here
+            setTimeout(() => {  console.log("Go to fetch events"); }, 30000);
+            // optional result available for subsequent tasks
+          }
+      position:
+        x: 0
+        y: 3
+      predecessors:
+        - trigger_validation
+      conditions:
+        states:
+          trigger_validation: OK
+    execute_load_test:
+      name: execute_load_test
+      description: Build a custom task running js Code
+      action: dynatrace.automations:run-javascript
+      input:
+        script: |-
+          // optional import of sdk modules
+          import { execution } from '@dynatrace-sdk/automation-utils';
+
+          export default async function ({ execution_id }) {
+            // your code goes here
+            // e.g. get the current execution
+            const ex = await execution(execution_id);
+            console.log('Automated script execution on behalf of', ex.trigger);
+            
+            return { triggeredBy: ex.trigger };
+          }
+      position:
+        x: 0
+        y: 1
+      predecessors: []
+    trigger_validation:
+      name: trigger_validation
+      description: Build a custom task running js Code
+      action: dynatrace.automations:run-javascript
+      input:
+        script: >-
+          // default function that will be run for the task
+
+          export default async function () {
+            // derive vesion from date
+            const now = new Date();
+            let hour = now.getHours();
+            var start = new Date(now.getFullYear(), 0, 0);
+            var diff = now - start;
+            var oneDay = 1000 * 60 * 60 * 24;
+            var day = Math.floor(diff / oneDay);
+            var buildId = day + hour;
+
+            
+            // event that triggers validation
+            const event = { 
+              "timeframe.from": "now-32m",
+              "timeframe.to": "now-2m",   
+              execution_context: {
+                  buildId: buildId + "." + "1",
+                  version: day + "." + hour + "." + "1",
+                  id: crypto.randomUUID().toString()
+              }, 
+              "guardian.name": "carts",
+              "service": "carts",
+          	"application": "sockshop",
+          	"stage": "production",
+              "version": day + "." + hour + "." + "1",
+              "event.provider": "Jenkins",
+              "event.type": "DEPLOYMENT"    
+            };
+
+            console.log("Ingesting event: ", event);
+
+            const ingestResponse = await fetch('/platform/classic/environment-api/v2/bizevents/ingest', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(event),
+            }); 
+
+            console.log("Event ingested", ingestResponse.status, await ingestResponse.text());
+
+            return event["execution_context"]
+          }
+      position:
+        x: 0
+        y: 2
+      predecessors:
+        - execute_load_test
+      conditions:
+        states:
+          execute_load_test: OK
+    get_validation_result:
+      name: get_validation_result
+      description: Executes DQL query
+      action: dynatrace.automations:execute-dql-query
+      input:
+        query: |-
+          fetch bizEvents
+          | filter event.type == "guardian.validation.finished"
+          | parse execution_context,"JSON:context"
+          | filter context[id] == "{{result('trigger_validation').id}}"
+      position:
+        x: 0
+        y: 4
+      predecessors:
+        - sleep_30
+      conditions:
+        states:
+          sleep_30: OK
+    create_demo_validations:
+      name: create_demo_validations
+      description: Build a custom task running js Code
+      action: dynatrace.automations:run-javascript
+      input:
+        script: ""
+      position:
+        x: 0
+        y: 5
+      predecessors:
+        - get_validation_result
+      conditions:
+        states:
+          get_validation_result: OK
+  description: ""
+  trigger:
+    schedule:
+      rule: null
+      trigger:
+        type: interval
+        intervalMinutes: 60
+      timezone: Europe/Madrid
+      isActive: true
+      isFaulty: false
+      nextExecution: 2024-10-08T05:00:00.000Z
+      filterParameters:
+        earliestStart: 2023-06-08
+        earliestStartTime: 00:00
+      inputs: {}
+  schemaVersion: 3

@@ -1,0 +1,3886 @@
+{
+  "version": 15,
+  "variables": [],
+  "tiles": {
+    "0": {
+      "type": "markdown",
+      "title": "",
+      "content": "## 💻 Online application\n---\n💼 Business KPI = Percentage change in applications submitted in the last hour vs. same time yesterday."
+    },
+    "1": {
+      "type": "markdown",
+      "title": "",
+      "content": "## 📋 Internal checks\n---\n💼 Business KPI = Percentage of checks completed successfully."
+    },
+    "2": {
+      "type": "markdown",
+      "title": "",
+      "content": "## 🧑‍💻 Manual review\n---\n💼 Business KPI = Percentage of applications needing to go for manual review."
+    },
+    "3": {
+      "type": "markdown",
+      "title": "",
+      "content": "## ✅ Application confirmed\n---\n💼 Business KPI = Time taken from application submission through to confirmation."
+    },
+    "4": {
+      "type": "markdown",
+      "title": "",
+      "content": "## ✍️ Customer registration\n---\n💼 Business KPI = Percentage of users taking longer than 90 minutes to access account for the first time."
+    },
+    "6": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Davis events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Davis events related to those Services.\nfetch bizevents\n| fieldsAdd problemExample = 0\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "problemExample",
+            "title": "Open Problems",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-themed-fireplace-color-01-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 0
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "problemExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "problemExample"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["problemExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🛠️ IT ISSUES",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "problemExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "problemExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "11": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the average order value split by loyalty.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and event.type == \"online.application\"\n| summarize `Number of applications` = count(), by:{account.type}",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "donutChart",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative",
+            "showTotalValue": true,
+            "hideLabels": false
+          },
+          "categoryOverrides": {
+            "basic": {
+              "color": "var(--dt-colors-charts-categorical-color-02-default, #2c2f3f)",
+              "added": 1719589867351
+            },
+            "bronze": {
+              "color": "var(--dt-colors-charts-categorical-color-10-default, #904523)",
+              "added": 1719589872753
+            },
+            "gold": {
+              "color": "var(--dt-colors-charts-categorical-color-06-default, #a9780f)",
+              "added": 1719589878838
+            },
+            "silver": {
+              "color": "var(--dt-colors-charts-categorical-color-05-default, #84859a)",
+              "added": 1719589883851
+            }
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "account.type",
+            "categoryAxisLabel": "account.type",
+            "valueAxis": "Number of applications",
+            "valueAxisLabel": "Number of applications",
+            "layout": "horizontal"
+          },
+          "legend": {
+            "hidden": false,
+            "position": "right"
+          },
+          "colorPalette": "purple-rain",
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "recordField": "searchTerm"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "account.type"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "Number of applications",
+              "rangeAxis": ""
+            }
+          ]
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "Number of bookings",
+            "unitCategory": "unspecified",
+            "baseUnit": "none",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1719589709341
+          }
+        ]
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "13": {
+      "type": "markdown",
+      "title": "",
+      "content": "Drilldown: [IT](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems) | [Security](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.vulnerabilities/ui/security/vulnerabilities) | [Carbon](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.carbon/) | [Business](https://www.dynatrace.com/company/dynatrace-for-executives/#02-business-analytics)"
+    },
+    "14": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the average order value.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and event.type == \"online.application\"\n| makeTimeseries applicationsMade = count(), interval:1h",
+      "davis": {
+        "enabled": true,
+        "componentState": {
+          "selectedAnalyzerName": "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer",
+          "inputData": {
+            "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer": {
+              "generalParameters": {
+                "timeframe": {
+                  "startTime": "now-24h",
+                  "endTime": "now"
+                },
+                "resolveDimensionalQueryData": true,
+                "logVerbosity": "INFO"
+              },
+              "numberOfSignalFluctuations": 1,
+              "alertCondition": "OUTSIDE",
+              "alertOnMissingData": false,
+              "violatingSamples": 2,
+              "slidingWindow": 5,
+              "dealertingSamples": 5,
+              "query": "// Real example from the data of the average order value.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and event.type == \"online.application\"\n| makeTimeseries applicationsMade = count(), interval:1h"
+            }
+          }
+        },
+        "davisVisualization": {
+          "isAvailable": true,
+          "settings": {
+            "visibleSections": "VISUALIZATION"
+          }
+        }
+      },
+      "visualization": "davis",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "Top 5?",
+            "title": "",
+            "isEnabled": false,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-09-default, #649438)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-14-default, #d56b1a)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-12-default, #cd3741)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "customer.id",
+            "valueAxisLabel": "booking.value",
+            "layout": "horizontal"
+          },
+          "legend": {
+            "hidden": true
+          },
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["averageOrderValue"],
+            "leftAxisDimensions": []
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "recordField": "Search term"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {},
+          "legend": "auto"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "15": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Account type distribution\n---\nWhat type of account was selected in the application - joint vs. personal."
+    },
+    "16": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Applications per hour\n---\nNumber of applications being made, broken down hourly."
+    },
+    "17": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Internal check success rate\n---\nWhat percentage of applications have their checks returned successfully."
+    },
+    "18": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Security events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Security events related to those Services.\nfetch bizevents\n| fieldsAdd securityExample = \"4/10\"\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "securityExample",
+            "title": "Security score",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "=",
+                "label": "",
+                "value": "4/10"
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "securityExample",
+            "valueAxisLabel": "account.fee",
+            "categoryAxis": "securityExample",
+            "valueAxis": "account.fee"
+          },
+          "hiddenLegendFields": [],
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["account.fee"],
+            "leftAxisDimensions": ["securityExample"]
+          }
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🔒 SECURITY",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "colorThresholdTarget": "background",
+          "recordField": "securityExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["securityExample"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": []
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "22": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the success rates of document checks.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and startsWith(event.type, \"documents.check\")\n//| summarize success = countIf(event.type == \"documents.check\"), fail = countIf(event.type == \"documents.check.documents.corrupt\")\n| makeTimeseries count(), by:{event.type}, bins:50",
+      "davis": {
+        "enabled": false,
+        "componentState": {
+          "selectedAnalyzerName": "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer",
+          "inputData": {
+            "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer": {
+              "generalParameters": {
+                "timeframe": {
+                  "startTime": "2024-06-27T14:11:35.440Z",
+                  "endTime": "2024-06-28T14:11:35.440Z"
+                },
+                "resolveDimensionalQueryData": true,
+                "logVerbosity": "INFO"
+              },
+              "numberOfSignalFluctuations": 1,
+              "alertCondition": "OUTSIDE",
+              "alertOnMissingData": false,
+              "violatingSamples": 3,
+              "slidingWindow": 5,
+              "dealertingSamples": 5,
+              "query": "// Real example from the data, of the average time to start picking an order.\nfetch bizevents\n| filter event.provider == \"acme.bank\" \n| filter event.type == \"warehouse.received\" or event.type == \"item.picked\"\n| sort timestamp asc\n| fieldsAdd receiveTime = if(event.type == \"warehouse.received\", timestamp), pickTime = if(event.type == \"item.picked\", timestamp)\n| summarize firstReceive = takeFirst(receiveTime), firstPick = takeFirst(pickTime), by:{order.id}\n| filterOut isNull(firstReceive) or isNull(firstPick)\n| fieldsAdd timeToPick = firstPick - firstReceive\n| makeTimeseries ninetyTimeToPick = percentile(timeToPick, 90), time:firstPick, bins:50"
+            }
+          }
+        },
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "barChart",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "",
+            "title": "",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-09-default, #649438)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-14-default, #d56b1a)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-12-default, #cd3741)"
+                },
+                "comparator": "≥",
+                "label": ""
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "legend": {
+            "hidden": true
+          },
+          "seriesOverrides": [
+            {
+              "seriesId": ["documents.check.documents.corrupt"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #ae132d)"
+                }
+              }
+            },
+            {
+              "seriesId": ["documents.check"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-03-default, #2a7453)"
+                }
+              }
+            }
+          ],
+          "colorPalette": "categorical",
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["count()"],
+            "leftAxisDimensions": ["event.type"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "event.type",
+            "valueAxisLabel": "interval",
+            "categoryAxis": "event.type",
+            "valueAxis": "interval"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": false,
+          "label": "",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "recordField": "single"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "event.type"
+          },
+          "legend": "auto",
+          "displayedFields": ["event.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            }
+          ]
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "ninetyTimeToPick",
+            "unitCategory": "time",
+            "baseUnit": "nanosecond",
+            "displayUnit": null,
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1717151082207
+          }
+        ]
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "23": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Document issues per location\n---\nNumber of customers with document issues broken down by location."
+    },
+    "24": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the number of items per order, per location. In this example we need to take data from a different event to get the order location.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and event.type == \"documents.check.documents.corrupt\"\n| summarize `Count` = count(), by:{location}\n| sort `Count` desc",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "categoricalBarChart",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "single",
+            "title": "",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-09-default, #649438)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-14-default, #d56b1a)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-12-default, #cd3741)"
+                },
+                "comparator": "≥",
+                "label": ""
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative",
+            "showTotalValue": true
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "location",
+            "valueAxisLabel": "Count",
+            "categoryAxis": "location",
+            "valueAxis": "Count",
+            "layout": "horizontal"
+          },
+          "legend": {
+            "hidden": true
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": false,
+          "label": "",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "recordField": "single",
+          "trend": {
+            "isInverseTrend": true
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "hexagon",
+          "dataMappings": {
+            "value": "location"
+          },
+          "legend": "right",
+          "displayedFields": ["location"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "Count",
+              "rangeAxis": ""
+            }
+          ]
+        },
+        "unitsOverrides": []
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "25": {
+      "type": "data",
+      "title": "",
+      "query": "// This number obviously requires the Carbon app to be installed. An example way to calculate the footprint for part of the journey is:\n// - Fetch the Biz Events related to this part of the journey.\n// - Collect a \"Distinct\" list of the Hosts those Biz Events come from.\n// - \"Lookup\" the Carbon events related to those hosts.\n// - (Optional) If there's lots of shared infrastructure, you can go one step further and use the Process CPU to distribute Carbon to the specific Processes in use.\nfetch bizevents\n| fieldsAdd carbonExample = 452\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "carbonExample",
+            "title": "Carbon footprint",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 1000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["carbonExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "carbonExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "carbonExample"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🌳 CARBON",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false,
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": true,
+            "isRelative": true,
+            "isInverseTrend": true
+          },
+          "recordField": "carbonExample",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "carbonExample",
+            "unitCategory": "mass",
+            "baseUnit": "kilogram",
+            "displayUnit": "kilogram",
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703159936837
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "carbonExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "26": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example of doing a lookup to compare against the number of applications made, for the same hour yesterday.\nfetch bizevents, from: -1h\n| filter event.provider == \"acme.bank\" and event.type == \"online.application\"\n| summarize ordersPackedNow = count(), by:{event.type}\n| lookup [fetch bizevents, from: -1d-1h, to:-1d | filter event.provider == \"acme.bank\" and event.type == \"online.application\" | summarize ordersPackedLastWeek = count(), by:{event.type} ], sourceField:event.type, lookupField:event.type\n| fieldsAdd percentageChange = ((toDouble(lookup.ordersPackedLastWeek) - toDouble(ordersPackedNow)) / toDouble(ordersPackedNow)) * 100",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "percentageChange",
+            "title": "Average order value",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": ">",
+                "label": "",
+                "value": -10
+              },
+              {
+                "id": 3,
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #ae132d)"
+                },
+                "comparator": "≤",
+                "label": "",
+                "value": -10
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "event.type",
+            "valueAxisLabel": "ordersPackedNow",
+            "categoryAxis": "event.type",
+            "valueAxis": "ordersPackedNow"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "💼 BUSINESS KPI",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "percentageChange"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "event.type"
+          },
+          "legend": "auto",
+          "displayedFields": ["event.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "ordersPackedNow",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "lookup.ordersPackedLastWeek",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "percentageChange",
+              "rangeAxis": ""
+            }
+          ]
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "percentageChange",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1717148328781
+          }
+        ]
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "28": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the success rates of document checks.\nfetch bizevents\n| filter event.provider == \"acme.bank\" and startsWith(event.type, \"documents.check\")\n| summarize success = countIf(event.type == \"documents.check\"), fail = countIf(event.type == \"documents.check.documents.corrupt\")\n| fieldsAdd percentage = (toDouble(fail) / toDouble(success)) * 100",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "percentage",
+            "title": "Success rate of document check",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 5
+              },
+              {
+                "id": 3,
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 5
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "job.fee"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "💼 BUSINESS KPI",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "percentage"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "success"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "percentage",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703163062500
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "success",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "fail",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "percentage",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "31": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example of calculating what percentage or applications get sent for manual review.\nfetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"manual.review\" or event.type == \"application.confirmed\"\n| summarize manual = countIf(event.type == \"manual.review\"), automatic = countIf(event.type == \"application.confirmed\")\n| fieldsAdd percent = (toDouble(manual) / toDouble(automatic)) * 100",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "percent",
+            "title": "Changes in orders being packed",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 40
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #9033a3)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 40
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "event.type",
+            "valueAxisLabel": "ordersPackedNow"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "💼 BUSINESS KPI",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "recordField": "percent",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "manual"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "percent",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1703100953267
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "manual",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "automatic",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "percent",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "32": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the time taken from submitting an application to it being confirmed.\nfetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"online.application\" or event.type == \"application.confirmed\"\n| summarize start.time = takeFirst(timestamp), end.time = takeLast(timestamp), by:{customer.id}\n| fieldsAdd duration = end.time - start.time\n| summarize ninetyDuration = percentile(duration, 90)",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "ninetyDuration",
+            "title": "Time from application through to confirmation",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #9033a3)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 18000000000000
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 18000000000000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "customer.id",
+            "valueAxisLabel": "duration"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "💼 BUSINESS KPI",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "ninetyDuration"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "ninetyDuration"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "shippingSuccessRate",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1703160585115
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "ninetyDuration",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "33": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example of calculating what percentage or applications get sent for manual review.\nfetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"manual.review\" or event.type == \"application.confirmed\"\n| makeTimeseries automatic = countIf(event.type == \"application.confirmed\"), manual = countIf(event.type == \"manual.review\"), bins:50",
+      "davis": {
+        "enabled": false,
+        "componentState": {
+          "selectedAnalyzerName": "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer",
+          "inputData": {
+            "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer": {
+              "generalParameters": {
+                "timeframe": {
+                  "startTime": "2024-06-27T14:11:35.440Z",
+                  "endTime": "2024-06-28T14:11:35.440Z"
+                },
+                "resolveDimensionalQueryData": true,
+                "logVerbosity": "INFO"
+              },
+              "numberOfSignalFluctuations": 1,
+              "alertCondition": "OUTSIDE",
+              "alertOnMissingData": false,
+              "violatingSamples": 4,
+              "slidingWindow": 5,
+              "dealertingSamples": 5,
+              "query": "fetch bizevents\n| filter event.provider == \"acme.bank\" and event.type == \"order.packed\"\n| makeTimeseries ordersPacked = count(), interval:1h"
+            }
+          }
+        },
+        "davisVisualization": {
+          "isAvailable": true,
+          "settings": {
+            "visibleSections": "VISUALIZATION"
+          }
+        }
+      },
+      "visualization": "barChart",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "legend": {
+            "hidden": true
+          },
+          "seriesOverrides": [
+            {
+              "seriesId": ["automatic"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-03-default, #2a7453)"
+                }
+              }
+            },
+            {
+              "seriesId": ["manual"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #ae132d)"
+                }
+              }
+            }
+          ],
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["automatic", "manual"],
+            "leftAxisDimensions": []
+          },
+          "categoricalBarChartSettings": {},
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "Success rate",
+          "prefixIcon": "",
+          "recordField": "singlevalue",
+          "autoscale": true,
+          "alignment": "center",
+          "trend": {
+            "isRelative": true
+          },
+          "sparklineSettings": {
+            "variant": "area",
+            "showTicks": true
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "interval"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "singlevalue",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703100359149
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "34": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Percentage of manual checks\n---\nPercentage of applications that need to be sent for manual checks."
+    },
+    "35": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Application completion time\n---\nTime taken from starting an application to confirmation."
+    },
+    "36": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Support outreach\n---\nNumber of pro-active support calls because applications took longer than 5 hours."
+    },
+    "37": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data looking at the time between shipping and order being received, for \"Gold\" members.\nfetch bizevents\n| filter event.provider == \"acme.bank\" \n| filter event.type == \"online.application\" or event.type == \"customer.registered\"\n| sort timestamp asc\n| fieldsAdd submitTimestamp = if(event.type == \"online.application\", timestamp), confirmedTimestamp = if(event.type == \"customer.registered\", timestamp)\n| summarize submitTime = takeMin(submitTimestamp), confirmedTime = takeMin(confirmedTimestamp), by:{customer.id}\n| filterOut isNull(submitTime) or isNull(confirmedTime)\n| fieldsAdd completionTime = confirmedTime - submitTime\n| makeTimeseries {avgCompletionTime = avg(completionTime), time:toTimestamp(submitTime)}",
+      "davis": {
+        "enabled": false,
+        "componentState": {
+          "selectedAnalyzerName": "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer",
+          "inputData": {
+            "dt.statistics.ui.anomaly_detection.AutoAdaptiveAnomalyDetectionAnalyzer": {
+              "generalParameters": {
+                "timeframe": {
+                  "startTime": "2024-07-08T12:01:23.984Z",
+                  "endTime": "2024-07-09T12:01:23.984Z"
+                },
+                "resolveDimensionalQueryData": true,
+                "logVerbosity": "INFO"
+              },
+              "numberOfSignalFluctuations": 1,
+              "alertCondition": "OUTSIDE",
+              "alertOnMissingData": false,
+              "violatingSamples": 3,
+              "slidingWindow": 5,
+              "dealertingSamples": 5,
+              "query": "// Real example from the data looking at the time between shipping and order being received, for \"Gold\" members.\nfetch bizevents\n| filter event.provider == \"acme.bank\" \n| filter event.type == \"online.application\" or event.type == \"customer.registered\"\n| sort timestamp asc\n| fieldsAdd submitTimestamp = if(event.type == \"online.application\", timestamp), confirmedTimestamp = if(event.type == \"customer.registered\", timestamp)\n| summarize submitTime = takeMin(submitTimestamp), confirmedTime = takeMin(confirmedTimestamp), by:{customer.id}\n| filterOut isNull(submitTime) or isNull(confirmedTime)\n| fieldsAdd completionTime = confirmedTime - submitTime\n| makeTimeseries {avgCompletionTime = avg(completionTime), time:toTimestamp(confirmedTime)}"
+            }
+          }
+        },
+        "davisVisualization": {
+          "isAvailable": true,
+          "settings": {
+            "visibleSections": "VISUALIZATION"
+          }
+        }
+      },
+      "visualization": "lineChart",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "legend": {
+            "hidden": true
+          },
+          "seriesOverrides": [
+            {
+              "seriesId": ["fail"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #9033a3)"
+                }
+              }
+            },
+            {
+              "seriesId": ["success"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-09-default, #649438)"
+                }
+              }
+            }
+          ],
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "customer.id",
+            "valueAxisLabel": "booking.value"
+          },
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["avgCompletionTime"],
+            "leftAxisDimensions": []
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "Success rate",
+          "prefixIcon": "",
+          "recordField": "singlevalue",
+          "autoscale": true,
+          "alignment": "center",
+          "trend": {
+            "isRelative": true
+          },
+          "sparklineSettings": {
+            "variant": "area",
+            "showTicks": true
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "interval"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "avgCompletionTime",
+            "unitCategory": "time",
+            "baseUnit": "nanosecond",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1703100359149
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "39": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Probable lost applications\n---\nApplications which went into manual review more than 2 hours ago."
+    },
+    "40": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Time for first account access\n---\nAverage time taken from having application confirmed and accessing account."
+    },
+    "41": {
+      "type": "data",
+      "title": "",
+      "query": "fetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"application.confirmed\" or event.type == \"account.accessed\"\n| summarize start.time = takeMin(timestamp), end.time = takeMax(timestamp), by:{customer.id}\n| fieldsAdd duration = end.time - start.time\n| filter toDouble(duration) > 0\n| makeTimeseries avg(duration), time:start.time",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "lineChart",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "",
+            "title": "",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-status-ideal-default, #2f6863)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-status-warning-default, #eca440)"
+                },
+                "comparator": "≥",
+                "label": ""
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-status-critical-default, #c4233b)"
+                },
+                "comparator": "≥",
+                "label": ""
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {
+            "platinum": {
+              "color": "var(--dt-colors-charts-loglevel-emergency-default, #9033a3)",
+              "added": 1717152716585
+            },
+            "sapphire": {
+              "color": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)",
+              "added": 1717152727709
+            },
+            "pearl": {
+              "color": "var(--dt-colors-charts-categorical-color-02-default, #2c2f3f)",
+              "added": 1717152738998
+            }
+          },
+          "legend": {
+            "hidden": true
+          },
+          "seriesOverrides": [
+            {
+              "seriesId": ["sparkline"],
+              "override": {
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-color-08-default, #8b6ecf)"
+                }
+              }
+            }
+          ],
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "mgm.rewards",
+            "valueAxisLabel": "count()"
+          },
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["avg(duration)"],
+            "leftAxisDimensions": []
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "Success rate",
+          "prefixIcon": "",
+          "recordField": "singlevalue",
+          "autoscale": true,
+          "alignment": "center",
+          "trend": {
+            "isRelative": true
+          },
+          "sparklineSettings": {
+            "variant": "area",
+            "showTicks": true
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "interval"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "avg(duration)",
+            "unitCategory": "time",
+            "baseUnit": "nanosecond",
+            "displayUnit": null,
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1703100359149
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "42": {
+      "type": "markdown",
+      "title": "",
+      "content": "### Realised revenue\n---\nTotal revenue from account fees, split by account type."
+    },
+    "45": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data of the time taken from submitting an application to it being confirmed.\nfetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"application.confirmed\" or event.type == \"account.accessed\"\n| summarize start.time = takeMin(timestamp), end.time = takeMax(timestamp), by:{customer.id}\n| fieldsAdd duration = end.time - start.time\n| filter toDouble(duration) > 0\n| fieldsAdd inSla = if(toDouble(duration) < 6000000000000, true, else:{false})\n| summarize inSla = countIf(inSla == true), outSla = countIf(inSla == false)\n| fieldsAdd percentage = toDouble(outSla) / (toDouble(outSla) + toDouble(inSla)) * 100",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "percentage",
+            "title": "SLA against the time taken to access account after confirmation",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 40
+              },
+              {
+                "id": 3,
+                "color": {
+                  "Default": "var(--dt-colors-charts-loglevel-emergency-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 40
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "customer.id",
+            "valueAxisLabel": "duration"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "💼 BUSINESS KPI",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "recordField": "percentage",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "inSla"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "percentage",
+            "unitCategory": "percentage",
+            "baseUnit": "percent",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703262264498
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "inSla",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "outSla",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "percentage",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "49": {
+      "type": "data",
+      "title": "",
+      "query": "fetch bizevents\n| filter event.provider == \"acme.bank\"\n| filter event.type == \"application.confirmed\" or event.type == \"manual.review\"\n| summarize confirmedCount = countIf(event.type == \"application.confirmed\"), manualCount = countIf(event.type == \"manual.review\"), manualTime = takeMax(timestamp), by:{customer.id}\n| fieldsAdd lostApplication = if(manualCount == 1 and confirmedCount == 0 and toDouble(now() - manualTime) > 7200000000000, true, else:{false})\n| filter lostApplication == true\n| summarize total = count()",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {
+            "sapphire": {
+              "color": "var(--dt-colors-charts-categorical-color-01-default, #134fc9)",
+              "added": 1717151655357
+            },
+            "gold": {
+              "color": "var(--dt-colors-charts-categorical-color-06-default, #a9780f)",
+              "added": 1717151659952
+            },
+            "noir": {
+              "color": "var(--dt-colors-charts-loglevel-none-default, #2c2f3f)",
+              "added": 1717151665036
+            },
+            "pearl": {
+              "color": "var(--dt-colors-charts-categorical-color-02-default, #2c2f3f)",
+              "added": 1717151669712
+            },
+            "platinum": {
+              "color": "var(--dt-colors-charts-categorical-color-07-default, #438fb1)",
+              "added": 1717151677352
+            }
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "order.id",
+            "valueAxisLabel": "pickedCount",
+            "layout": "horizontal"
+          },
+          "hiddenLegendFields": [],
+          "legend": {
+            "hidden": true
+          }
+        },
+        "singleValue": {
+          "showLabel": false,
+          "label": "",
+          "prefixIcon": "FolderOpenIcon",
+          "recordField": "total",
+          "autoscale": true,
+          "sparklineSettings": {
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isInverseTrend": true,
+            "isVisible": false
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "total"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "singlevalue",
+            "unitCategory": "time",
+            "baseUnit": "second",
+            "displayUnit": null,
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703177374563
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "total",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "51": {
+      "type": "markdown",
+      "title": "",
+      "content": " "
+    },
+    "53": {
+      "type": "markdown",
+      "title": "",
+      "content": "Drilldown: [IT](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems) | [Security](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.vulnerabilities/ui/security/vulnerabilities) | [Carbon](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.carbon/) | [Business](https://www.dynatrace.com/company/dynatrace-for-executives/#02-business-analytics)"
+    },
+    "54": {
+      "type": "markdown",
+      "title": "",
+      "content": "Drilldown: [IT](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems) | [Security](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.vulnerabilities/ui/security/vulnerabilities) | [Carbon](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.carbon/) | [Business](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.flow/analyze/vu9U3hXa3q0AAAABAChhcHA6ZHluYXRyYWNlLmJpei5mbG93OmJpei1mbG93LXNldHRpbmdzAAZ0ZW5hbnQABnRlbmFudAAkZGU5Nzg2MDAtNDEzYi0zZGM2LTgwNTgtOTc2NDJhNDE5ZGFivu9U3hXa3q0)"
+    },
+    "55": {
+      "type": "markdown",
+      "title": "",
+      "content": "Drilldown: [IT](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems) | [Security](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.vulnerabilities/ui/security/vulnerabilities) | [Carbon](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.carbon/) | [Business](https://www.dynatrace.com/company/dynatrace-for-executives/#02-business-analytics)"
+    },
+    "56": {
+      "type": "markdown",
+      "title": "",
+      "content": "Drilldown: [IT](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.problems/ui/problems) | [Security](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.classic.vulnerabilities/ui/security/vulnerabilities) | [Carbon](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.carbon/) | [Business](https://guu84124.apps.dynatrace.com/ui/apps/dynatrace.biz.flow/analyze/vu9U3hXa3q0AAAABAChhcHA6ZHluYXRyYWNlLmJpei5mbG93OmJpei1mbG93LXNldHRpbmdzAAZ0ZW5hbnQABnRlbmFudAAkZGU5Nzg2MDAtNDEzYi0zZGM2LTgwNTgtOTc2NDJhNDE5ZGFivu9U3hXa3q0)"
+    },
+    "66": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Davis events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Davis events related to those Services.\nfetch bizevents\n| fieldsAdd problemExample = 0\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "problemExample",
+            "title": "Open Problems",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-themed-fireplace-color-01-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 0
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "problemExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "problemExample"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["problemExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🛠️ IT ISSUES",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "problemExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "problemExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "67": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Davis events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Davis events related to those Services.\nfetch bizevents\n| fieldsAdd problemExample = 0\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "problemExample",
+            "title": "Open Problems",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-themed-fireplace-color-01-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 0
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "problemExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "problemExample"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["problemExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🛠️ IT ISSUES",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "problemExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "problemExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "68": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Davis events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Davis events related to those Services.\nfetch bizevents\n| fieldsAdd problemExample = 0\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "problemExample",
+            "title": "Open Problems",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-themed-fireplace-color-01-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 0
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "problemExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "problemExample"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["problemExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🛠️ IT ISSUES",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "problemExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "problemExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "69": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Davis events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Davis events related to those Services.\nfetch bizevents\n| fieldsAdd problemExample = 0\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "problemExample",
+            "title": "Open Problems",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-categorical-themed-fireplace-color-01-default, #ae132d)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 1
+              },
+              {
+                "id": 2,
+                "color": {
+                  "Default": "var(--dt-colors-charts-vulnerability-status-resolved-default, #3e8e6a)"
+                },
+                "comparator": "≥",
+                "label": "",
+                "value": 0
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "problemExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "problemExample"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["problemExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🛠️ IT ISSUES",
+          "prefixIcon": "",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false
+          },
+          "colorThresholdTarget": "background",
+          "recordField": "problemExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "problemExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "70": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Security events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Security events related to those Services.\nfetch bizevents\n| fieldsAdd securityExample = \"3/10\"\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "securityExample",
+            "title": "Security score",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "=",
+                "label": "",
+                "value": "3/10"
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "securityExample",
+            "valueAxisLabel": "product.fee",
+            "categoryAxis": "securityExample",
+            "valueAxis": "product.fee"
+          },
+          "hiddenLegendFields": [],
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["product.fee"],
+            "leftAxisDimensions": ["securityExample"]
+          }
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🔒 SECURITY",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "colorThresholdTarget": "background",
+          "recordField": "securityExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["securityExample"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": []
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "71": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Security events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Security events related to those Services.\nfetch bizevents\n| fieldsAdd securityExample = \"5/10\"\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "securityExample",
+            "title": "Security score",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "=",
+                "label": "",
+                "value": "5/10"
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "securityExample",
+            "valueAxis": "booking.value",
+            "categoryAxisLabel": "securityExample",
+            "valueAxisLabel": "booking.value"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["booking.value"],
+            "leftAxisDimensions": ["securityExample"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🔒 SECURITY",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "colorThresholdTarget": "background",
+          "recordField": "securityExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["securityExample"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": []
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "72": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Security events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Security events related to those Services.\nfetch bizevents\n| fieldsAdd securityExample = \"4/10\"\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "securityExample",
+            "title": "Security score",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "=",
+                "label": "",
+                "value": "4/10"
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "securityExample",
+            "valueAxisLabel": "account.fee",
+            "categoryAxis": "securityExample",
+            "valueAxis": "account.fee"
+          },
+          "hiddenLegendFields": [],
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["account.fee"],
+            "leftAxisDimensions": ["securityExample"]
+          }
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🔒 SECURITY",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "colorThresholdTarget": "background",
+          "recordField": "securityExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["securityExample"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": []
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "73": {
+      "type": "data",
+      "title": "",
+      "query": "// The two main ways to achieve this number are:\n// - Query Security events and filter by the services/entities known to power this part of the journey.\n// - Using a topology lookup:\n//   - Get Biz Events related to this step.\n//   - \"Lookup\" the Spans using the trace ID.\n//   - Collect a \"Distinct\" list of the Services.\n//   - \"Lookup\" any Security events related to those Services.\nfetch bizevents\n| fieldsAdd securityExample = \"2/10\"\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "securityExample",
+            "title": "Security score",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 1,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "=",
+                "label": "",
+                "value": "2/10"
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "securityExample",
+            "valueAxis": "booking.value",
+            "categoryAxisLabel": "securityExample",
+            "valueAxisLabel": "booking.value"
+          },
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["booking.value"],
+            "leftAxisDimensions": ["securityExample"]
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🔒 SECURITY",
+          "prefixIcon": "",
+          "autoscale": true,
+          "alignment": "center",
+          "colorThresholdTarget": "background",
+          "recordField": "securityExample"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["securityExample"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "histogram": {
+          "dataMappings": []
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "74": {
+      "type": "data",
+      "title": "",
+      "query": "// This number obviously requires the Carbon app to be installed. An example way to calculate the footprint for part of the journey is:\n// - Fetch the Biz Events related to this part of the journey.\n// - Collect a \"Distinct\" list of the Hosts those Biz Events come from.\n// - \"Lookup\" the Carbon events related to those hosts.\n// - (Optional) If there's lots of shared infrastructure, you can go one step further and use the Process CPU to distribute Carbon to the specific Processes in use.\nfetch bizevents\n| fieldsAdd carbonExample = 105\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "carbonExample",
+            "title": "Carbon footprint",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 1000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["carbonExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "carbonExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "carbonExample"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🌳 CARBON",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false,
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": true,
+            "isRelative": true,
+            "isInverseTrend": true
+          },
+          "recordField": "carbonExample",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "carbonExample",
+            "unitCategory": "mass",
+            "baseUnit": "kilogram",
+            "displayUnit": "kilogram",
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703159936837
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "carbonExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "75": {
+      "type": "data",
+      "title": "",
+      "query": "// This number obviously requires the Carbon app to be installed. An example way to calculate the footprint for part of the journey is:\n// - Fetch the Biz Events related to this part of the journey.\n// - Collect a \"Distinct\" list of the Hosts those Biz Events come from.\n// - \"Lookup\" the Carbon events related to those hosts.\n// - (Optional) If there's lots of shared infrastructure, you can go one step further and use the Process CPU to distribute Carbon to the specific Processes in use.\nfetch bizevents\n| fieldsAdd carbonExample = 587\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "carbonExample",
+            "title": "Carbon footprint",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 1000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["carbonExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "carbonExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "carbonExample"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🌳 CARBON",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false,
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": true,
+            "isRelative": true,
+            "isInverseTrend": true
+          },
+          "recordField": "carbonExample",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "carbonExample",
+            "unitCategory": "mass",
+            "baseUnit": "kilogram",
+            "displayUnit": "kilogram",
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703159936837
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "carbonExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "76": {
+      "type": "data",
+      "title": "",
+      "query": "// This number obviously requires the Carbon app to be installed. An example way to calculate the footprint for part of the journey is:\n// - Fetch the Biz Events related to this part of the journey.\n// - Collect a \"Distinct\" list of the Hosts those Biz Events come from.\n// - \"Lookup\" the Carbon events related to those hosts.\n// - (Optional) If there's lots of shared infrastructure, you can go one step further and use the Process CPU to distribute Carbon to the specific Processes in use.\nfetch bizevents\n| fieldsAdd carbonExample = 98\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "carbonExample",
+            "title": "Carbon footprint",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 1000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["carbonExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "carbonExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "carbonExample"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🌳 CARBON",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false,
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": true,
+            "isRelative": true,
+            "isInverseTrend": true
+          },
+          "recordField": "carbonExample",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "carbonExample",
+            "unitCategory": "mass",
+            "baseUnit": "kilogram",
+            "displayUnit": "kilogram",
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703159936837
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "carbonExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "77": {
+      "type": "data",
+      "title": "",
+      "query": "// This number obviously requires the Carbon app to be installed. An example way to calculate the footprint for part of the journey is:\n// - Fetch the Biz Events related to this part of the journey.\n// - Collect a \"Distinct\" list of the Hosts those Biz Events come from.\n// - \"Lookup\" the Carbon events related to those hosts.\n// - (Optional) If there's lots of shared infrastructure, you can go one step further and use the Process CPU to distribute Carbon to the specific Processes in use.\nfetch bizevents\n| fieldsAdd carbonExample = 56\n| limit 1",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [
+          {
+            "id": 1,
+            "field": "carbonExample",
+            "title": "Carbon footprint",
+            "isEnabled": true,
+            "rules": [
+              {
+                "id": 0,
+                "color": {
+                  "Default": "var(--dt-colors-charts-apdex-excellent-default, #2a7453)"
+                },
+                "comparator": "<",
+                "label": "",
+                "value": 1000
+              }
+            ]
+          }
+        ],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {},
+          "fieldMapping": {
+            "timestamp": "timestamp",
+            "leftAxisValues": ["carbonExample"],
+            "leftAxisDimensions": ["dt.entity.host"]
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxis": "dt.entity.host",
+            "valueAxis": "carbonExample",
+            "categoryAxisLabel": "dt.entity.host",
+            "valueAxisLabel": "carbonExample"
+          },
+          "hiddenLegendFields": []
+        },
+        "singleValue": {
+          "showLabel": true,
+          "label": "🌳 CARBON",
+          "autoscale": true,
+          "sparklineSettings": {
+            "isVisible": false,
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": true,
+            "isRelative": true,
+            "isInverseTrend": true
+          },
+          "recordField": "carbonExample",
+          "colorThresholdTarget": "background"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "timestamp"
+          },
+          "legend": "auto",
+          "displayedFields": ["account.type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "carbonExample",
+            "unitCategory": "mass",
+            "baseUnit": "kilogram",
+            "displayUnit": "kilogram",
+            "decimals": 0,
+            "suffix": "",
+            "delimiter": false,
+            "added": 1703159936837
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "carbonExample",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "78": {
+      "type": "data",
+      "title": "",
+      "query": "fetch bizevents\n| filter event.provider == \"acme.bank\" \n| filter event.type == \"online.application\" or event.type == \"account.accessed\"\n| summarize accessedCount = countIf(event.type == \"account.accessed\"), accountFee = takeAny(account.fee), time = takeMax(timestamp), `Account type` = takeAny(account.type), by:{customer.id}\n| filter accessedCount > 0\n| summarize `Account fee` = sum(accountFee), by:{`Account type`}",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "donutChart",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative",
+            "showTotalValue": true
+          },
+          "categoryOverrides": {},
+          "categoricalBarChartSettings": {
+            "categoryAxis": "Account type",
+            "valueAxis": "Account fee",
+            "categoryAxisLabel": "Account type",
+            "valueAxisLabel": "Account fee",
+            "layout": "vertical"
+          },
+          "hiddenLegendFields": [],
+          "legend": {
+            "hidden": false,
+            "position": "right"
+          },
+          "colorPalette": "purple-rain"
+        },
+        "singleValue": {
+          "showLabel": false,
+          "label": "",
+          "prefixIcon": "",
+          "recordField": "test",
+          "autoscale": true,
+          "sparklineSettings": {
+            "showTicks": true
+          },
+          "alignment": "center"
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "Account type"
+          },
+          "legend": "auto",
+          "displayedFields": ["Account type"],
+          "colorMode": "color-palette",
+          "colorPalette": "categorical"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "Account fee",
+            "unitCategory": "currency",
+            "baseUnit": "usd",
+            "displayUnit": null,
+            "decimals": 2,
+            "suffix": "",
+            "delimiter": true,
+            "added": 1703177374563
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "Account fee",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    },
+    "79": {
+      "type": "data",
+      "title": "",
+      "query": "// Real example from the data looking at the time between shipping and order being received, for \"Gold\" members.\nfetch bizevents\n| filter event.provider == \"acme.bank\" \n| filter event.type == \"online.application\" or event.type == \"customer.registered\"\n| sort timestamp asc\n| fieldsAdd submitTimestamp = if(event.type == \"online.application\", timestamp), confirmedTimestamp = if(event.type == \"customer.registered\", timestamp)\n| summarize submitTime = takeMin(submitTimestamp), confirmedTime = takeMin(confirmedTimestamp), by:{customer.id}\n| filterOut isNull(submitTime) or isNull(confirmedTime)\n| fieldsAdd completionTime = confirmedTime - submitTime\n| filter toDouble(completionTime) > 18000000000000\n| makeTimeseries sparkline = count(), time:confirmedTime\n| fieldsAdd single = arraySum(sparkline)",
+      "davis": {
+        "enabled": false,
+        "davisVisualization": {
+          "isAvailable": true
+        }
+      },
+      "visualization": "singleValue",
+      "visualizationSettings": {
+        "thresholds": [],
+        "chartSettings": {
+          "gapPolicy": "connect",
+          "circleChartSettings": {
+            "groupingThresholdType": "relative",
+            "groupingThresholdValue": 0,
+            "valueType": "relative"
+          },
+          "categoryOverrides": {
+            "sapphire": {
+              "color": "var(--dt-colors-charts-categorical-color-01-default, #134fc9)",
+              "added": 1717151655357
+            },
+            "gold": {
+              "color": "var(--dt-colors-charts-categorical-color-06-default, #a9780f)",
+              "added": 1717151659952
+            },
+            "noir": {
+              "color": "var(--dt-colors-charts-loglevel-none-default, #2c2f3f)",
+              "added": 1717151665036
+            },
+            "pearl": {
+              "color": "var(--dt-colors-charts-categorical-color-02-default, #2c2f3f)",
+              "added": 1717151669712
+            },
+            "platinum": {
+              "color": "var(--dt-colors-charts-categorical-color-07-default, #438fb1)",
+              "added": 1717151677352
+            }
+          },
+          "categoricalBarChartSettings": {
+            "categoryAxisLabel": "customer.id",
+            "valueAxisLabel": "completionTime",
+            "layout": "horizontal"
+          },
+          "hiddenLegendFields": [],
+          "legend": {
+            "hidden": true
+          },
+          "fieldMapping": {
+            "timestamp": "timeframe",
+            "leftAxisValues": ["sparkline"],
+            "leftAxisDimensions": ["single"]
+          }
+        },
+        "singleValue": {
+          "showLabel": false,
+          "label": "",
+          "prefixIcon": "MailIcon",
+          "recordField": "single",
+          "autoscale": true,
+          "sparklineSettings": {
+            "showTicks": true
+          },
+          "alignment": "center",
+          "trend": {
+            "isVisible": false,
+            "isRelative": true
+          }
+        },
+        "table": {
+          "rowDensity": "condensed",
+          "enableSparklines": false,
+          "hiddenColumns": [],
+          "lineWrapIds": [],
+          "columnWidths": {}
+        },
+        "honeycomb": {
+          "shape": "square",
+          "dataMappings": {
+            "value": "single"
+          },
+          "legend": "auto",
+          "displayedFields": [null],
+          "colorMode": "color-palette",
+          "colorPalette": "blue"
+        },
+        "unitsOverrides": [
+          {
+            "identifier": "totalVoucherOffer",
+            "unitCategory": "currency",
+            "baseUnit": "usd",
+            "displayUnit": null,
+            "decimals": 0,
+            "suffix": "$",
+            "delimiter": true,
+            "added": 1703177374563
+          }
+        ],
+        "histogram": {
+          "dataMappings": [
+            {
+              "valueAxis": "interval",
+              "rangeAxis": ""
+            },
+            {
+              "valueAxis": "single",
+              "rangeAxis": ""
+            }
+          ]
+        }
+      },
+      "querySettings": {
+        "maxResultRecords": 1000,
+        "defaultScanLimitGbytes": 500,
+        "maxResultMegaBytes": 100,
+        "defaultSamplingRatio": 10,
+        "enableSampling": false
+      }
+    }
+  },
+  "layouts": {
+    "0": {
+      "x": 0,
+      "y": 0,
+      "w": 4,
+      "h": 2
+    },
+    "1": {
+      "x": 5,
+      "y": 0,
+      "w": 4,
+      "h": 2
+    },
+    "2": {
+      "x": 10,
+      "y": 0,
+      "w": 4,
+      "h": 2
+    },
+    "3": {
+      "x": 15,
+      "y": 0,
+      "w": 4,
+      "h": 2
+    },
+    "4": {
+      "x": 20,
+      "y": 0,
+      "w": 4,
+      "h": 2
+    },
+    "6": {
+      "x": 0,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "11": {
+      "x": 0,
+      "y": 17,
+      "w": 4,
+      "h": 5
+    },
+    "13": {
+      "x": 0,
+      "y": 6,
+      "w": 4,
+      "h": 1
+    },
+    "14": {
+      "x": 0,
+      "y": 9,
+      "w": 4,
+      "h": 5
+    },
+    "15": {
+      "x": 0,
+      "y": 15,
+      "w": 4,
+      "h": 2
+    },
+    "16": {
+      "x": 0,
+      "y": 7,
+      "w": 4,
+      "h": 2
+    },
+    "17": {
+      "x": 5,
+      "y": 7,
+      "w": 4,
+      "h": 2
+    },
+    "18": {
+      "x": 2,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "22": {
+      "x": 5,
+      "y": 9,
+      "w": 4,
+      "h": 5
+    },
+    "23": {
+      "x": 5,
+      "y": 15,
+      "w": 4,
+      "h": 2
+    },
+    "24": {
+      "x": 5,
+      "y": 17,
+      "w": 4,
+      "h": 5
+    },
+    "25": {
+      "x": 0,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "26": {
+      "x": 2,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "28": {
+      "x": 7,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "31": {
+      "x": 12,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "32": {
+      "x": 17,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "33": {
+      "x": 10,
+      "y": 9,
+      "w": 4,
+      "h": 5
+    },
+    "34": {
+      "x": 10,
+      "y": 7,
+      "w": 4,
+      "h": 2
+    },
+    "35": {
+      "x": 15,
+      "y": 7,
+      "w": 4,
+      "h": 2
+    },
+    "36": {
+      "x": 15,
+      "y": 15,
+      "w": 4,
+      "h": 2
+    },
+    "37": {
+      "x": 15,
+      "y": 9,
+      "w": 4,
+      "h": 5
+    },
+    "39": {
+      "x": 10,
+      "y": 15,
+      "w": 4,
+      "h": 2
+    },
+    "40": {
+      "x": 20,
+      "y": 7,
+      "w": 4,
+      "h": 2
+    },
+    "41": {
+      "x": 20,
+      "y": 9,
+      "w": 4,
+      "h": 5
+    },
+    "42": {
+      "x": 20,
+      "y": 15,
+      "w": 4,
+      "h": 2
+    },
+    "45": {
+      "x": 22,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "49": {
+      "x": 10,
+      "y": 17,
+      "w": 4,
+      "h": 5
+    },
+    "51": {
+      "x": 0,
+      "y": 14,
+      "w": 24,
+      "h": 1
+    },
+    "53": {
+      "x": 10,
+      "y": 6,
+      "w": 4,
+      "h": 1
+    },
+    "54": {
+      "x": 15,
+      "y": 6,
+      "w": 4,
+      "h": 1
+    },
+    "55": {
+      "x": 20,
+      "y": 6,
+      "w": 4,
+      "h": 1
+    },
+    "56": {
+      "x": 5,
+      "y": 6,
+      "w": 4,
+      "h": 1
+    },
+    "66": {
+      "x": 5,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "67": {
+      "x": 10,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "68": {
+      "x": 15,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "69": {
+      "x": 20,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "70": {
+      "x": 7,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "71": {
+      "x": 12,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "72": {
+      "x": 17,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "73": {
+      "x": 22,
+      "y": 2,
+      "w": 2,
+      "h": 2
+    },
+    "74": {
+      "x": 5,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "75": {
+      "x": 10,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "76": {
+      "x": 15,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "77": {
+      "x": 20,
+      "y": 4,
+      "w": 2,
+      "h": 2
+    },
+    "78": {
+      "x": 20,
+      "y": 17,
+      "w": 4,
+      "h": 5
+    },
+    "79": {
+      "x": 15,
+      "y": 17,
+      "w": 4,
+      "h": 5
+    }
+  },
+  "importedWithCode": true,
+  "settings": {
+    "defaultTimeframe": {
+      "value": {
+        "from": "now()-24h",
+        "to": "now()"
+      },
+      "enabled": true
+    }
+  }
+}
